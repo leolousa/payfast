@@ -1,3 +1,5 @@
+// Módulos de customização a serem incluídos ao Express
+
 var express = require('express');             // Carrega o módulo do Express
 var consign = require('consign');             // Carrega o módulo do Consign
 var bodyParser = require('body-parser');      // Carrega o módulo body-parser
@@ -10,9 +12,9 @@ module.exports = function() {
   app.use(bodyParser.json());
   app.use(validator());
 
-  consign()
-    .include('resources')               // Inclui a pasta 'resources'
-    .then('persistencia')               // Inclui a pasta 'persistencia'
+  consign()                                   // Invoca o consign()
+    .include('resources')                     // Inclui a pasta 'resources'
+    .then('persistencia')                     // Inclui a pasta 'persistencia'
     .into(app);
 
   return app;

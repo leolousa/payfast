@@ -1,11 +1,13 @@
+// Módulo de Pagamentos
+
 module.exports = function(app) {
   
-  app.get('/pagamentos', function(req, res) {
+  app.get('/pagamentos', function(req, res) {                         // Lista pagamentos
     console.log('Recebida requisição!');
     res.send('OK.');
   });
 
-  app.post('/pagamentos/pagamento', function(req, res) {
+  app.post('/pagamentos/pagamento', function(req, res) {              // Salva pagamento
 
     // Definindo as validações
     req.assert('forma_de_pagamento', 'Forma de pagamento é obrigatoria!').notEmpty();
@@ -20,13 +22,13 @@ module.exports = function(app) {
       return
     }
 
-    var pagamento = req.body;
+    var pagamento = req.body;                                         // Pega o corpo da requisição
     console.log('Processando a rewuisição de um novo pagamento!');
 
     pagamento.status = 'CRIADO';
     pagamento.data = new Date();
 
-    var conn = app.persistencia.connectionFactory();                // Acessa a pasta que tem o módulo de conexão com o BD
+    var conn = app.persistencia.connectionFactory();                  // Acessa a pasta que tem o módulo de conexão com o BD
     var pagamentoDAO = new app.persistencia.PagamentoDAO(conn);
 
     pagamentoDAO.salva(pagamento, function(erro, resultado) {
@@ -39,8 +41,6 @@ module.exports = function(app) {
         res.status(201).json(pagamento);
       }
     });
-
-
 
   });
 
