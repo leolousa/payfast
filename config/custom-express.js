@@ -10,7 +10,8 @@ module.exports = function() {
   app.use(bodyParser.json());
 
   consign()
-    .include('resources')
+    .include('resources')               // Inclui a pasta 'resources'
+    .then('persistencia')               // Inclui a pasta 'persistencia'
     .into(app);
 
   return app;

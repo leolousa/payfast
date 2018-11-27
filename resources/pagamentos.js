@@ -11,8 +11,15 @@ module.exports = function(app) {
 
     pagamento.status = 'CRIADO';
     pagamento.data = new Date();
-    
-    res.send(pagamento);
+
+    var conn = app.persistencia.connectionFactory();            // Acessa a pasta que tem o módulo de conexão com o BD
+    var pagamentoDAO = new app.persistencia.PagamentoDAO(conn);
+
+    pagamentoDAO.salva(pagamento, function(erro, resultado) {
+      console.log('Pagamento criado');
+      res.json(pagamento);
+    });
+
   });
 
 }
