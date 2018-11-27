@@ -7,6 +7,27 @@ module.exports = function(app) {
     res.send('OK.');
   });
 
+  app.put('/pagamentos/pagamento/:id', function(req, res) {           // Confirma pagamento
+    
+    var pagamento = {};
+    var id = req.params.id;
+
+    pagamento.id = id;
+    pagamento.status = 'CONFIRMADO';
+
+    var conn = app.persistencia.connectionFactory();                  // Acessa a pasta que tem o módulo de conexão com o BD
+    var pagamentoDAO = new app.persistencia.PagamentoDAO(conn);
+    
+    pagamentoDAO.atualiza(pagamento, function(erro) {
+      if (erro) {
+        res.status(500).send(erro);
+        return;
+      }
+      res.send(pagamento)
+    });
+
+  });
+
   app.post('/pagamentos/pagamento', function(req, res) {              // Salva pagamento
 
     // Definindo as validações
