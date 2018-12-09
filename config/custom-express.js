@@ -15,6 +15,7 @@ module.exports = function() {
   consign()                                   // Invoca o consign()
     .include('resources')                     // Inclui a pasta 'resources'
     .then('persistencia')                     // Inclui a pasta 'persistencia'
+    .then('servicos')                         // Inclui a pasta 'servicos'
     .into(app);
 
   return app;
