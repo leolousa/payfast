@@ -12,6 +12,7 @@ module.exports = function() {
   app.use(bodyParser.json());
   app.use(validator());
 
+  // Adiciona as pastas do projeto para poder invocar nos arquivos .js
   consign()                                   // Invoca o consign()
     .include('resources')                     // Inclui a pasta 'resources'
     .then('persistencia')                     // Inclui a pasta 'persistencia'

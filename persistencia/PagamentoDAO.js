@@ -12,11 +12,11 @@ PagamentoDAO.prototype.atualiza = function(pagamento, callback) {
 }
 
 PagamentoDAO.prototype.lista = function(callback) {
-  this._connection.query('SELECT FROM pagamentos', callback);
+  this._connection.query('SELECT * FROM pagamentos', callback);
 }
 
 PagamentoDAO.prototype.buscaPorId = function(id, callback) {
-  this._connection.query('SELECT FROM pagamentos WHERE id=', [id], callback);
+  this._connection.query('SELECT * FROM pagamentos WHERE id=?', [id], callback);
 }
 
 module.exports = function() {

@@ -5,12 +5,47 @@ const PAGAMENTO_CANCELADO = "CANCELADO";
 
 module.exports = function(app) {
   
-  app.get('/pagamentos', function(req, res) {                         // Lista pagamentos
+  app.get('/pagamentos', function(req, res) {                       // Lista pagamentos
     console.log('Recebida requisição!');
     res.send('OK.');
   });
 
-  app.delete('/pagamentos/pagamento/:id', function(req, res) {        // Cancela pagamento
+  app.get('/pagamentos/pagamento/:id', function(req, res) {         // Consulta pagamento informado
+    var id = req.params.id;
+    console.log('Consultado pagamento: ' + id);
+
+    var memcachedClient = app.servicos.memcachedClient();           // Importa o mencachedClient
+
+    // Consulta a chave no cache primeiro
+    memcachedClient.get('pagamento-' + id, function(erro, retorno) {
+      if(erro || !retorno){
+        console.log('MEMCACHED: MISS - chave não encontrada');
+        // Se não encontrar no cache, acessa a pasta que tem o módulo de conexão com o BD
+        var conn = app.persistencia.connectionFactory();
+        var pagamentoDAO = new app.persistencia.PagamentoDAO(conn);
+
+        pagamentoDAO.buscaPorId(id, function(erro, resultado) {
+          if(erro) {
+            console.log('Erro ao consultar no banco: ' + erro);
+            res.status(500).send(erro);
+            return;
+          }
+          console.log('Pagamento encontrado: ' + JSON.stringify(resultado));
+          res.json(resultado);
+          return;
+        });
+        
+      } else { // HIT no cache
+        console.log('MEMCACHED: HIT - valor: ' + JSON.stringify(retorno));
+        res.json(retorno);
+        return;
+      }
+    });
+   
+  });
+
+
+  app.delete('/pagamentos/pagamento/:id', function(req, res) {        // Cancela/Deleta pagamento
     var pagamento = {};
     var id = req.params.id;
 
@@ -29,6 +64,7 @@ module.exports = function(app) {
       res.status(204).send(pagamento)
     });
   });
+
 
   app.put('/pagamentos/pagamento/:id', function(req, res) {           // Confirma pagamento
     
@@ -52,6 +88,7 @@ module.exports = function(app) {
 
   });
 
+
   app.post('/pagamentos/pagamento', function(req, res) {              // Salva pagamento
 
     // Definindo as validações
@@ -70,7 +107,7 @@ module.exports = function(app) {
     var pagamento = req.body["pagamento"];                            // Pega a chave 'pagamento' no corpo da requisição
     console.log('Processando a requisição de um novo pagamento!');
 
-    pagamento.status = PAGAMENTO_CRIADO;                                      // Seta dados ao pagamento
+    pagamento.status = PAGAMENTO_CRIADO;                              // Seta dados ao pagamento
     pagamento.data = new Date();
 
     var conn = app.persistencia.connectionFactory();                  // Acessa a pasta que tem o módulo de conexão com o BD
@@ -83,6 +120,14 @@ module.exports = function(app) {
       } else {
         pagamento.id = resultado.insertId;
         console.log('Pagamento criado');
+
+        var memcachedClient = app.servicos.memcachedClient();
+
+        // Seta um chave no cache
+        memcachedClient.set('pagamento-' + pagamento.id, pagamento,
+            60000, function(erro) {
+              console.log('Nova chave adicionada ao cache: pagamento-' + pagamento.id);
+        });
 
         if (pagamento.forma_de_pagamento == 'cartao') {
           var cartao = req.body["cartao"];
