@@ -3,6 +3,8 @@ const PAGAMENTO_CRIADO = "CRIADO";
 const PAGAMENTO_CONFIRMADO = "CONFIRMADO";
 const PAGAMENTO_CANCELADO = "CANCELADO";
 
+var logger = require('../servicos/logger.js');
+
 module.exports = function(app) {
   
   app.get('/pagamentos', function(req, res) {                       // Lista pagamentos
@@ -12,7 +14,9 @@ module.exports = function(app) {
 
   app.get('/pagamentos/pagamento/:id', function(req, res) {         // Consulta pagamento informado
     var id = req.params.id;
-    console.log('Consultado pagamento: ' + id);
+    //console.log('Consultando pagamento: ' + id);
+
+    logger.info('Consultando pagamento: ' + id);
 
     var memcachedClient = app.servicos.memcachedClient();           // Importa o mencachedClient
 

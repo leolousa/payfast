@@ -1,0 +1,3 @@
+2018-12-15 23:12:23 - info: Consultando pagamento: 12
+2018-12-15 23:12:38 - info: ::1 - - [16/Dec/2018:01:48:41 +0000] "GET /pagamentos/pagamento/12 HTTP/1.1" - -
+
