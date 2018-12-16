@@ -14,9 +14,9 @@ module.exports = function(app) {
 
   app.get('/pagamentos/pagamento/:id', function(req, res) {         // Consulta pagamento informado
     var id = req.params.id;
-    //console.log('Consultando pagamento: ' + id);
+    console.log('Consultando pagamento: ' + id);
 
-    logger.info('Consultando pagamento: ' + id);
+    logger.error('Consultando pagamento: ' + id);
 
     var memcachedClient = app.servicos.memcachedClient();           // Importa o mencachedClient
 

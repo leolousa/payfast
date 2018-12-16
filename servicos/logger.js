@@ -1,5 +1,5 @@
 /**
- * Serviço de log da aplicação
+ * Implementação do Serviço de log da aplicação
  */
 
 var winston = require('winston');
@@ -19,7 +19,7 @@ module.exports = winston.createLogger({
           format: 'YYYY-MM-DD HH:MM:SS' // Formato da data e hora
         }),
         winston.format.printf(info => {
-          return `${info.timestamp} - ${info.level}: ${info.message}`
+          return `PAYFAST: ${info.timestamp} - ${info.level}: ${info.message}`
         })
       ),
       filename: 'logs/payfast.log',

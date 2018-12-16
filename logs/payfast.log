@@ -1,3 +1,9 @@
-2018-12-15 23:12:23 - info: Consultando pagamento: 12
-2018-12-15 23:12:38 - info: ::1 - - [16/Dec/2018:01:48:41 +0000] "GET /pagamentos/pagamento/12 HTTP/1.1" - -
+PAYFAST: 2018-12-16 15:12:00 - info: Consultando pagamento: 12
+PAYFAST: 2018-12-16 15:12:32 - info: ::1 - - [16/Dec/2018:17:54:18 +0000] "GET /pagamentos/pagamento/12 HTTP/1.1" - -
+
+PAYFAST: 2018-12-16 15:12:44 - info: Consultando pagamento: 22
+PAYFAST: 2018-12-16 15:12:42 - info: ::1 - - [16/Dec/2018:17:54:24 +0000] "GET /pagamentos/pagamento/22 HTTP/1.1" - -
+
+PAYFAST: 2018-12-16 15:12:31 - error: Consultando pagamento: 22
+PAYFAST: 2018-12-16 15:12:50 - info: ::1 - - [16/Dec/2018:17:55:08 +0000] "GET /pagamentos/pagamento/22 HTTP/1.1" - -
 
